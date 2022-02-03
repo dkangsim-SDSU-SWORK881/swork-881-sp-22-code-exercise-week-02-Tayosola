@@ -1,7 +1,7 @@
 ---
 title: "SWORK 881 week02"
-author: "your name goes here "
-date: "MM/DD/YYYY"
+author: "Stephen Omotayo Ololade "
+date: "02/02/2022"
 output: html_document
 ---
 
@@ -11,27 +11,59 @@ output: html_document
 ```
 
 
+
 # Data
 ```{r}
 # load data
 give_your_data_name_here<- read_csv("")
-
-#how many observations and variables? 
-
 ```
-#how many observations and variables? 
-[provide your answer here]
 
 
 ```{r}
+
+Data.01 <- read_csv("Data/LHS_exercise_01272022.csv")
+
+```
+
+
+
+```{r}
+install.packages("tidymodels",dependencies = T)
+```
+
+
+```{r}
+#how many observations and variables? 
+# 268 obsevations,  8 variables
+``` 
+#how many observations and variables? 
+[provide your answer here]
+
+# 268 obsevations,  8 variables
+
+```{r}
 # create a new variable called `depression` by summing all ptsd variables. Use tidy approach
+# Additional one variable created
+```
+#let selects some variables
 
+```{r}
 
+data.02<- Data.01%>%
+  mutate(depression = rowSums(across(ptsd1_1:ptsd4_1), na.rm=T)) 
+        
 ```
 
 
 ```{r}
 #run simple descriptive statistics for all variables
+```
+
+#let's do descriptive statistics
+
+```{r}
+
+summary(Data.01)
 
 
 ```
@@ -41,13 +73,56 @@ DESCRIBE THE DATA BRIEFLY HERE
 
 
 
+```{r}
+##There are 9 variables consting of response identity, age, sex, education and four levels of depression scores.
+##The age ranges between 18 and 70years with the mean=32 ()
+```
+
 # Model and Visualization
 > What is the effect of `age`, `sex`, and `education` on `depression score`? 
 
 Create a linear regression model that answers the question above. Print the results of the output and model diagnostics.
 
+
+#lets create a summed variable called  depression score
 ```{r}
-# lm
+data.03<- Data.01%>%
+  select(ptsd1_1, ptsd2_1, ptsd3_1, ptsd4_1, age, sex, education)%>%
+  mutate(ptsd_score = rowSums(across(ptsd1_1:ptsd4_1), na.rm=T), 
+         ptsd_mean = rowMeans(across(ptsd1_1:ptsd4_1), na.rm=T))
+
+
+```
+
+# Let's create
+```{r}
+
+fit.1 <- lm(ptsd_score ~ age,
+            data = data.03)
+
+summary(fit.1)
+
+## Age is significantly associated with depression score . p-value: 0.003966
+  # Adjusted R-squared:0.02713
+
+### Education: p-value: 0.07;  djusted R-squared: 0.01173
+# Sex :p-value: 0.1596;  djusted R-squared: 0.00368
+## sex and education are not significantly associated with depression score 
+
+
+
+```
+
+
+
+```{r}
+fit.1 <- lm(depression ~education, 
+            data.03=data.02)
+
+
+summary (fit.1)
+
+
 
 ```
 
@@ -61,11 +136,48 @@ Create a linear regression model that answers the question above. Print the resu
 
 ```{r}
 # use ggplot to plot histogram of residuals (use 20 bins)
+ggplot(fit.1, 
+       aes(fit.1$residuals))+
+  geom_histogram(bins=20)
+
+```
+
+```{r}
+ggplot(fit.1, 
+       aes(fit.1$residuals))+
+  geom_histogram(bins=100)
+
+```
+``
+```{r}
+
+
+```
+```{r}
+par(mfrow =c(2,2))
+plot (fit.1)
+
+```
+
+`{r}
 
 
 ```
 
+
+
+
 # Discussion of Results
 
 Describe and interpret your results, including any statistical information you believe important: 
+
+
+```{r} The current study examines possible factors influecing the depression scales. Linear regression model indicated that sex is a significant factor that determines the depression scores of individual. Athough, it was not certain from the study what role that gender plays
+
+```
+
+
+```{re
+#.
+```
 
